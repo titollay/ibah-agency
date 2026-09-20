@@ -1,3 +1,3 @@
 export interface HeaderProps {
-  account: string;
+  account?: string;
 }
