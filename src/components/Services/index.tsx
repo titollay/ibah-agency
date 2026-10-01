@@ -16,7 +16,8 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
 
   return (
     <section className="services" id="services" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Decorative SVG Shapes */}
+      {/* Decorative Wave & SVG Shapes */}
+      <img src={waveBg} alt="" className="services-wave-bg" />
       <img src={dynamiteBg} alt="" className="services-deco-left" />
       <img src={dynamite2Bg} alt="" className="services-deco-right" />
 
@@ -27,20 +28,22 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
           font-family: 'Montserrat', sans-serif;
           background-color: #F8F7F5;
         }
+        html.dark .services {
+          background-color: #0d0d0f;
+        }
         @media (max-width: 630px) {
           .services-header {
             margin-top: 15px;
           }
         }
 
-        .services::before {
-          content: '';
+        .services-wave-bg {
           position: absolute;
           inset: 0;
-          background-image: url("${waveBg}");
-          background-repeat: no-repeat;
-          background-position: bottom center;
-          background-size: cover;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: bottom center;
           opacity: 0.9;
           pointer-events: none;
           z-index: 0;
