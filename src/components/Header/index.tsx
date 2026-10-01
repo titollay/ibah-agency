@@ -44,9 +44,21 @@ function Header({ account }: HeaderProps) {
 
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const languages = [
-    { code: 'FR', label: 'Français', icon: '🇫🇷' },
-    { code: 'EN', label: 'English', icon: '🇬🇧' },
-    { code: 'AR', label: 'العربية', icon: '🇸🇦' }
+    { 
+      code: 'FR', 
+      label: 'Français', 
+      flagSvg: 'https://flagcdn.com/w40/fr.png' 
+    },
+    { 
+      code: 'EN', 
+      label: 'English', 
+      flagSvg: 'https://flagcdn.com/w40/gb.png' 
+    },
+    { 
+      code: 'AR', 
+      label: 'العربية', 
+      flagSvg: 'https://flagcdn.com/w40/sa.png' 
+    }
   ];
 
   const handleLangChange = (code: string) => {
@@ -165,6 +177,7 @@ function Header({ account }: HeaderProps) {
               isDarkMode={isDarkMode}
               className={isDarkMode ? 'dark-nav-link' : ''}
               aria-label={t('nav.changeLang')}
+              style={{ fontWeight: 700 }}
             >
               {lang} <FontAwesomeIcon icon={faGlobe} style={{ fontSize: '13px', marginLeft: '4px' }} />
             </LangButton>
@@ -182,9 +195,14 @@ function Header({ account }: HeaderProps) {
                       key={l.code}
                       isActive={lang === l.code}
                       onClick={() => handleLangChange(l.code)}
+                      style={{ gap: '10px', justifyContent: 'flex-start', padding: '10px 14px' }}
                     >
-                      <span style={{ fontSize: '16px' }}>{l.icon}</span>
-                      <span>{l.label}</span>
+                      <img 
+                        src={l.flagSvg} 
+                        alt={l.code} 
+                        style={{ width: '20px', height: '14px', borderRadius: '2px', objectFit: 'cover' }} 
+                      />
+                      <span style={{ fontWeight: 700, fontSize: '14px' }}>{l.code}</span>
                     </LangOptionBtn>
                   ))}
                 </LangDropdownMenu>
