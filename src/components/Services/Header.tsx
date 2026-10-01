@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { useLanguage } from '../../contexts/LanguageContext';
+
 interface HeaderProps {
   header: {
     title?: string;
@@ -8,12 +10,13 @@ interface HeaderProps {
 }
 
 const ServicesHeader: React.FC<HeaderProps> = ({ header }) => {
-  const title = header?.title || "NOS SERVICES";
-  const body = header?.body || "Des solutions numériques sur mesure conçues pour propulser votre entreprise vers l'excellence.";
+  const { t } = useLanguage();
+  const title = header?.title || t('services.title');
+  const body = header?.body || t('services.body');
 
   return (
     <header className="services-header">
-      <span className="services-label">Savoir-Faire</span>
+      <span className="services-label">{t('services.label')}</span>
       <h2 className="services-title">{title}</h2>
       <p className="services-paragraph">{body}</p>
     </header>

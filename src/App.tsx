@@ -7,15 +7,18 @@ import GlobalStyle from './styles/global';
 import theme from './styles/theme';
 import DarkModeToggle from './components/DarkModeToggle';
 import ScrollToTop from './components/ScrollToTop';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Routes />
-      <ScrollToTop />
-      <DarkModeToggle />
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Routes />
+        <ScrollToTop />
+        <DarkModeToggle />
+      </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

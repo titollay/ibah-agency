@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Parallax from 'parallax-js';
 
+import { useLanguage } from '../../contexts/LanguageContext';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronLeft,
@@ -47,67 +49,26 @@ import {
   Leaves,
 } from './styles';
 
-const heroSlides = [
-  {
-    id: 0,
-    tag: "DIGITAL PRODUCTS & SOLUTIONS",
-    title: "IBAH AGENCY",
-    titleHtml: "IBAH <span style='color: #A44C4C !important'>AGENCY</span>",
-    descTitle: "Transformation",
-    highlightWord: "numérique",
-    descSubtitle: "sur mesure",
-    descBody: "Agence moderne offrant une transformation numérique sur mesure, des logiciels personnalisés et des solutions intelligentes pour entreprises.",
-    ctaText: "Découvrir nos solutions",
-    ctaLink: "#about-us",
-    juicePng: juice,
-    juiceWebp: juiceOptimized
-  },
-  {
-    id: 1,
-    tag: "SOLUTIONS IA & DATA",
-    title: "INTELLIGENCE ARTIFICIELLE",
-    descTitle: "Solutions",
-    highlightWord: "intelligentes",
-    descSubtitle: "& automatisées",
-    descBody: "Intégration d'agents IA, d'outils d'analyse prédictive et d'automatisation des données pour démultiplier l'efficacité de votre entreprise.",
-    ctaText: "Explorer les services IA",
-    ctaLink: "#services",
-    juicePng: juice3,
-    juiceWebp: juice3Optimized
-  },
-  {
-    id: 2,
-    tag: "DEVELOPPEMENT WEB & MOBILE",
-    title: "INNOVATION WEB",
-    descTitle: "Applications",
-    highlightWord: "sur mesure",
-    descSubtitle: "& réactives",
-    descBody: "Conception de sites modernes, plateformes SaaS réactives et d'applications mobiles iOS & Android d'une performance remarquable.",
-    ctaText: "Voir nos réalisations",
-    ctaLink: "#portfolio",
-    juicePng: juice,
-    juiceWebp: juiceOptimized
-  },
-  {
-    id: 3,
-    tag: "AUTOMATISATION & CONSEIL",
-    title: "AGENCE DIGITALE",
-    descTitle: "Accompagnement",
-    highlightWord: "stratégique",
-    descSubtitle: "& audit expert",
-    descBody: "Optimisation globale des processus métier, audit d'architecture et conseils experts pour accélérer votre transformation digitale.",
-    ctaText: "Demander un devis",
-    ctaLink: "#contact",
-    juicePng: juice3,
-    juiceWebp: juice3Optimized
-  }
-];
-
 function Home() {
+  const { t } = useLanguage();
   const [parallaxScene, setParallaxScene] = useState<Parallax>();
   const [activeSlide, setActiveSlide] = useState(0);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [preSelectedService, setPreSelectedService] = useState<string | null>(null);
+
+  const slideAssets = [
+    { juicePng: juice, juiceWebp: juiceOptimized, ctaLink: '#about-us' },
+    { juicePng: juice3, juiceWebp: juice3Optimized, ctaLink: '#services' },
+    { juicePng: juice, juiceWebp: juiceOptimized, ctaLink: '#portfolio' },
+    { juicePng: juice3, juiceWebp: juice3Optimized, ctaLink: '#contact' }
+  ];
+
+  const translatedSlides: any[] = t('hero.slides');
+  const heroSlides = translatedSlides.map((slide, index) => ({
+    ...slide,
+    id: index,
+    ...slideAssets[index]
+  }));
 
   useEffect(() => {
     const sceneNode = document.getElementById('scene');
@@ -132,7 +93,7 @@ function Home() {
   const handleCtaClick = (e: React.MouseEvent<HTMLAnchorElement>, link: string) => {
     e.preventDefault();
     
-    if (link === '#contact' || currentSlide.ctaText === 'Demander un devis') {
+    if (link === '#contact' || currentSlide.ctaText.includes('devis') || currentSlide.ctaText.includes('quote') || currentSlide.ctaText.includes('تسعيرة')) {
       setIsQuoteModalOpen(true);
     } else {
       const element = document.querySelector(link);

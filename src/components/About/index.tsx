@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from "framer-motion";
+import { useLanguage } from "../../contexts/LanguageContext";
 import aboutVideo from "../../assets/about.mp4";
 
 export default function About() {
+  const { t } = useLanguage();
   const shapeBgUrl = `${process.env.PUBLIC_URL}/svg/shape.svg`;
 
   return (
@@ -183,10 +185,10 @@ export default function About() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <span className="about-label">Qui Sommes-Nous</span>
-          <h2 className="about-title">À PROPOS DE NOUS</h2>
+          <span className="about-label">{t('about.label')}</span>
+          <h2 className="about-title">{t('about.title')}</h2>
           <p className="about-paragraph">
-            Une agence créative et digitale dédiée à la transformation numérique et l'innovation sur mesure.
+            {t('about.paragraph')}
           </p>
         </motion.div>
 
@@ -224,17 +226,17 @@ export default function About() {
             viewport={{ once: true }}
           >
             <div>
-              <h2 className="about-philosophy-title">Notre Philosophie</h2>
+              <h2 className="about-philosophy-title">{t('about.philosophyTitle')}</h2>
             </div>
 
             <blockquote className="about-quote">
               <span className="about-quote-mark">«</span>
-              &nbsp;IBAH Agency met l'innovation et la transformation numérique directement au service de votre croissance.
+              &nbsp;{t('about.quote')}
               <span className="about-quote-mark">&nbsp;»</span>
             </blockquote>
 
             <p className="about-desc">
-              Développer des solutions digitales performantes et sur mesure ne devrait pas être complexe. IBAH Agency vous accompagne dans la création de logiciels personnalisés, d'applications web modernes et d'expériences numériques d'exception — conçues pour propulser votre entreprise vers l'avenir.
+              {t('about.desc')}
             </p>
           </motion.div>
 

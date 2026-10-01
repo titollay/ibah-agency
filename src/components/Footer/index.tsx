@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 import logo from "../../assets/img/logo.png";
 import logo1 from "../../assets/img/logo-1.png";
+import LegalModal, { LegalTabType } from "../LegalModal";
 
 const servicesList = [
   { label: "Développement Web & Mobile", href: "#services" },
@@ -17,17 +19,17 @@ const navigationList = [
   { label: "Contact", href: "#contact" },
 ];
 
-const companyList = [
-  { label: "IBAH Agency", href: "#" },
-  { label: "Politique de confidentialité", href: "#" },
-  { label: "Conditions d'utilisation", href: "#" },
-  { label: "Mentions Légales", href: "#" },
+const companyList: { label: string; href: string; tab?: LegalTabType }[] = [
+  { label: "IBAH Agency", href: "#about-us" },
+  { label: "Politique de confidentialité", href: "#", tab: "privacy" },
+  { label: "Conditions d'utilisation", href: "#", tab: "terms" },
+  { label: "Mentions Légales", href: "#", tab: "legal" },
 ];
 
 const socials = [
   {
     label: "Facebook",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/profile.php?id=61594798027912",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -45,7 +47,7 @@ const socials = [
   },
   {
     label: "Instagram",
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/ibah.agency/",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
@@ -64,10 +66,13 @@ const socials = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
   const year = new Date().getFullYear();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLegalModalOpen, setIsLegalModalOpen] = useState(false);
+  const [legalTab, setLegalTab] = useState<LegalTabType>('privacy');
 
   useEffect(() => {
     const checkDarkMode = () => {
@@ -104,6 +109,8 @@ export default function Footer() {
       setTimeout(() => setSubscribed(false), 4000);
     }
   };
+
+  const headings = t<string[]>('footer.headings') || ['Services', 'Navigation', 'Agence', 'Newsletter'];
 
   return (
     <>
@@ -405,7 +412,7 @@ export default function Footer() {
                 <h2 className="footer-logo-text">IBAH Agency</h2>
               </div>
               <p className="footer-desc">
-                Votre partenaire digital d'excellence. Nous concevons des applications sur mesure, des plateformes e-commerce et des solutions web innovantes.
+                {t('footer.desc')}
               </p>
               <div className="footer-socials">
                 {socials.map((s, i) => (
@@ -425,65 +432,84 @@ export default function Footer() {
 
             {/* ── Services ── */}
             <div>
-              <h5 className="footer-heading">Services</h5>
+              <h5 className="footer-heading">{headings[0]}</h5>
               <ul className="footer-links-list">
-                {servicesList.map((item, i) => (
+                {servicesList.map((item, i) => {
+                  const translatedList = (t('footer.servicesList') as { label: string }[]) || [];
+                  const label = translatedList[i]?.label || item.label;
+                  return (
                   <li key={i}>
                     <a href={item.href} className="footer-link">
-                      {item.label}
+                      {label}
                     </a>
                   </li>
-                ))}
+                )})}
               </ul>
             </div>
 
             {/* ── Navigation ── */}
             <div>
-              <h5 className="footer-heading">Navigation</h5>
+              <h5 className="footer-heading">{headings[1]}</h5>
               <ul className="footer-links-list">
-                {navigationList.map((item, i) => (
+                {navigationList.map((item, i) => {
+                  const translatedList = (t('footer.navigationList') as { label: string }[]) || [];
+                  const label = translatedList[i]?.label || item.label;
+                  return (
                   <li key={i}>
                     <a href={item.href} className="footer-link">
-                      {item.label}
+                      {label}
                     </a>
                   </li>
-                ))}
+                )})}
               </ul>
             </div>
 
             {/* ── Company ── */}
             <div>
-              <h5 className="footer-heading">Agence</h5>
+              <h5 className="footer-heading">{headings[2]}</h5>
               <ul className="footer-links-list">
-                {companyList.map((item, i) => (
+                {companyList.map((item, i) => {
+                  const translatedList = (t('footer.companyList') as { label: string }[]) || [];
+                  const label = translatedList[i]?.label || item.label;
+                  return (
                   <li key={i}>
-                    <a href={item.href} className="footer-link">
-                      {item.label}
+                    <a
+                      href={item.href}
+                      className="footer-link"
+                      onClick={(e) => {
+                        if (item.tab) {
+                          e.preventDefault();
+                          setLegalTab(item.tab);
+                          setIsLegalModalOpen(true);
+                        }
+                      }}
+                    >
+                      {label}
                     </a>
                   </li>
-                ))}
+                )})}
               </ul>
             </div>
 
             {/* ── Newsletter ── */}
             <div>
-              <h5 className="footer-heading">Newsletter</h5>
-              <p className="footer-newsletter-text">Restez informé de nos actualités</p>
+              <h5 className="footer-heading">{headings[3]}</h5>
+              <p className="footer-newsletter-text">{t('footer.newsletterText')}</p>
               <form onSubmit={handleSubscribe}>
                 <input
                   type="email"
-                  placeholder="Votre adresse email"
+                  placeholder={t('footer.emailPlaceholder')}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="footer-input"
                 />
                 <button type="submit" className="footer-sub-btn">
-                  S'ABONNER
+                  {t('footer.btnText')}
                 </button>
               </form>
               {subscribed && (
-                <p className="footer-subscribed-msg">✓ Merci pour votre inscription !</p>
+                <p className="footer-subscribed-msg">{t('footer.successMsg')}</p>
               )}
             </div>
           </div>
@@ -491,7 +517,7 @@ export default function Footer() {
           {/* ── Bottom Bar ── */}
           <div className="footer-bottom">
             <p>
-              &copy; {year} <span className="footer-year">IBAH Agency</span>. Tous droits réservés. | Développé par{" "}
+              &copy; {year} <span className="footer-year">IBAH Agency</span>. {t('footer.rights')}{" "}
               <a
                 href="https://www.linkedin.com/in/taha-allay-baa0a72a9/"
                 target="_blank"
@@ -504,6 +530,12 @@ export default function Footer() {
           </div>
         </div>
       </footer>
+
+      <LegalModal
+        isOpen={isLegalModalOpen}
+        onClose={() => setIsLegalModalOpen(false)}
+        defaultTab={legalTab}
+      />
     </>
   );
 }

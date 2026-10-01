@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../../contexts/LanguageContext';
 import ServicesHeader from './Header';
 import ServicesBody from './Body';
 
@@ -8,6 +9,7 @@ interface ServicesProps {
 }
 
 const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
+  const { t } = useLanguage();
   const dynamiteBg = `${process.env.PUBLIC_URL}/svg/dynamite.svg`;
   const dynamite2Bg = `${process.env.PUBLIC_URL}/svg/dynamite2.svg`;
   const waveBg = `${process.env.PUBLIC_URL}/svg/wave.svg`;
@@ -260,8 +262,8 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
           viewport={{ once: true }}
         >
           <ServicesHeader header={{
-            title: "NOS SERVICES",
-            body: "Des solutions numériques sur mesure conçues pour propulser votre entreprise vers l'excellence."
+            title: t('services.title'),
+            body: t('services.body')
           }} />
         </motion.div>
 

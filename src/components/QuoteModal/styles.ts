@@ -282,7 +282,14 @@ export const BudgetRangeContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+`;
+
+export const BudgetInputRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 `;
 
 export const BudgetRangeInput = styled.input`
@@ -369,5 +376,166 @@ export const BudgetValueDisplay = styled.div`
     font-size: 13px;
     padding: 5px 10px;
     min-width: 70px;
+  }
+`;
+
+export const BudgetNumberInput = styled.input`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #A44C4C;
+  text-align: center;
+  width: 110px;
+  padding: 8px 10px;
+  background: rgba(164, 76, 76, 0.05);
+  border: 2px solid rgba(164, 76, 76, 0.3);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+  -moz-appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus {
+    border-color: #A44C4C;
+    box-shadow: 0 0 0 3px rgba(164, 76, 76, 0.12);
+    background: rgba(164, 76, 76, 0.08);
+  }
+
+  @media (max-width: 768px) {
+    width: 90px;
+    font-size: 14px;
+  }
+`;
+
+export const BudgetCurrency = styled.span`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #A44C4C;
+`;
+
+export const SuccessContainer = styled(motion.div)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+`;
+
+export const SuccessIconWrapper = styled(motion.div)<DarkModeProps>`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: ${({ isDarkMode }) => isDarkMode ? 'rgba(164, 76, 76, 0.15)' : '#FDF2F2'};
+  border: 2px solid #A44C4C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #A44C4C;
+  margin-bottom: 24px;
+
+  svg {
+    width: 40px;
+    height: 40px;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 0;
+  }
+`;
+
+export const SuccessTitle = styled.h3<DarkModeProps>`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: ${({ isDarkMode }) => isDarkMode ? '#FFFFFF' : '#111827'};
+  margin-bottom: 12px;
+`;
+
+export const SuccessSubtitle = styled.p<DarkModeProps>`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  color: ${({ isDarkMode }) => isDarkMode ? '#9CA3AF' : '#4B5563'};
+  max-width: 440px;
+  line-height: 1.6;
+`;
+
+export const StepIndicatorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  gap: 8px;
+`;
+
+export const StepDot = styled.div<{ active?: boolean, completed?: boolean, isDarkMode?: boolean }>`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: ${({ active, completed, isDarkMode }) => 
+    (active || completed) ? '#ffffff' : (isDarkMode ? '#666' : '#999')
+  };
+  background: ${({ active, completed, isDarkMode }) => 
+    (active || completed) ? '#A44C4C' : (isDarkMode ? '#333' : '#e5e7eb')
+  };
+  transition: all 0.3s ease;
+`;
+
+export const StepLine = styled.div<{ completed?: boolean }>`
+  height: 2px;
+  width: 40px;
+  background: ${({ completed }) => completed ? '#A44C4C' : '#e5e7eb'};
+  transition: all 0.3s ease;
+  
+  @media (max-width: 768px) {
+    width: 20px;
+  }
+`;
+
+export const NavButtonsContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+`;
+
+export const SecondaryButton = styled.button<{ isDarkMode?: boolean }>`
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: ${({ isDarkMode }) => isDarkMode ? '#e0e0e0' : '#666666'};
+  background: transparent;
+  border: 2px solid ${({ isDarkMode }) => isDarkMode ? '#333' : '#e5e7eb'};
+  border-radius: 8px;
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: ${({ isDarkMode }) => isDarkMode ? '#333' : '#f5f5f5'};
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    padding: 14px 28px;
+    font-size: 15px;
   }
 `;

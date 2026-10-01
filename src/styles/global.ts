@@ -308,4 +308,25 @@ export default createGlobalStyle`
   ul {
     list-style: none;
   }
+
+  /* RTL Support (Arabic) */
+  html[dir="rtl"] body {
+    font-family: 'Cairo', 'Tajawal', 'Helvetica Neue', 'Arial', sans-serif;
+  }
+  
+  html[dir="rtl"] .hero-title,
+  html[dir="rtl"] .about-title,
+  html[dir="rtl"] .services-title,
+  html[dir="rtl"] .portfolio-title,
+  html[dir="rtl"] .testimonials-title,
+  html[dir="rtl"] .contact-title,
+  html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3, 
+  html[dir="rtl"] h4, html[dir="rtl"] h5, html[dir="rtl"] h6 {
+    font-family: 'Cairo', 'Tajawal', 'Helvetica Neue', 'Arial', sans-serif;
+  }
+
+  html[dir="rtl"] .input-group,
+  html[dir="rtl"] .form-row {
+    text-align: right;
+  }
 `;

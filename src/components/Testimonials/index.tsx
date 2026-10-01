@@ -1,61 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 // ─── Testimonials Data ───────────────────────────────────────────────────────
-const testimonials = [
+const testimonialsBase = [
   {
     id: 1,
     img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
-    name: "Sarah Benali",
-    role: "CEO — ALLZY E-Commerce",
-    date: "Février 2026",
     stars: 5,
-    text: "Excellente plateforme e-commerce ! L'équipe IBAH Agency a totalement réinventé notre boutique en ligne. Les performances et le design sur mesure ont permis de doubler nos conversions en un temps record."
   },
   {
     id: 2,
     img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300",
-    name: "Dr. Karim Alami",
-    role: "Directeur — AnalyseMed",
-    date: "Janvier 2026",
     stars: 5,
-    text: "Une plateforme d'IA médicale intuitive et extrêmement performante. La rapidité de traitement des données et le soin apporté au design de l'interface sont tout simplement remarquables."
   },
   {
     id: 3,
     img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300",
-    name: "Leila Tazi",
-    role: "Fondatrice — MyCVForge",
-    date: "Mars 2026",
     stars: 5,
-    text: "Très satisfaite de la création de notre générateur de CV optimisé par l'IA. Le processus a été fluide, l'équipe très réactive et le rendu final dépasse largement nos attentes !"
   },
   {
     id: 4,
     img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300",
-    name: "Youssef Berrada",
-    role: "Opérations — BusWay App",
-    date: "Mars 2026",
     stars: 5,
-    text: "Une application mobile de suivi de bus en temps réel d'une réactivité incroyable. Design moderne, code stable et une expérience utilisateur parfaite."
   },
   {
     id: 5,
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300",
-    name: "Amal Rochdi",
-    role: "Directrice — CRFR Formations",
-    date: "Avril 2026",
     stars: 5,
-    text: "Le système de gestion des événements et formations créé par IBAH Agency a simplifié l'ensemble de notre workflow. Une qualité de service irréprochable !"
   },
   {
     id: 6,
     img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300",
-    name: "Omar Drissi",
-    role: "Fondateur — VetCare System",
-    date: "Avril 2026",
     stars: 4,
-    text: "Excellente méthode de travail, respect des délais et accompagnement technique sur mesure. Notre application Web de gestion vétérinaire fonctionne à la perfection."
   }
 ];
 
@@ -73,7 +50,7 @@ function StarRating({ stars }: { stars: number }) {
 }
 
 // ─── Card Component ──────────────────────────────────────────────────────────
-function TestimonialCard({ t }: { t: typeof testimonials[0] }) {
+function TestimonialCard({ t }: { t: any }) {
   return (
     <div className="testimonial-card">
       {/* Quote Icon */}
@@ -103,8 +80,16 @@ function TestimonialCard({ t }: { t: typeof testimonials[0] }) {
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 export default function Testimonials() {
+  const { t } = useLanguage();
+
+  const translatedItems = t<{ id: number, name: string, role: string, date: string, text: string }[]>('testimonials.items') || [];
+  const fullTestimonials = testimonialsBase.map(base => {
+    const translation = translatedItems.find(item => item.id === base.id) || { name: '', role: '', date: '', text: '' };
+    return { ...base, ...translation };
+  });
+
   const [activeIndex, setActiveIndex] = useState(0);
-  const featuredTestimonials = testimonials.slice(0, 3);
+  const featuredTestimonials = fullTestimonials.slice(0, 3);
   const wave1Bg = `${process.env.PUBLIC_URL}/svg/wave1.svg`;
   const starBg = `${process.env.PUBLIC_URL}/svg/star.svg`;
   const ppBg = `${process.env.PUBLIC_URL}/svg/pp.svg`;
@@ -481,10 +466,10 @@ export default function Testimonials() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <span className="testimonials-subtitle">Témoignages</span>
-          <h2 className="testimonials-title">CE QUE DISENT NOS CLIENTS</h2>
+          <span className="testimonials-subtitle">{t('testimonials.subtitle')}</span>
+          <h2 className="testimonials-title">{t('testimonials.title')}</h2>
           <p className="testimonials-desc">
-            Découvrez pourquoi les entreprises et startups font confiance à IBAH Agency pour le développement et la transformation numérique de leurs projets sur mesure.
+            {t('testimonials.desc')}
           </p>
         </motion.div>
 
@@ -544,7 +529,7 @@ export default function Testimonials() {
 
         {/* ── 3-Column Grid ── */}
         <div className="testimonials-grid">
-          {testimonials.slice(3).map((t, index) => (
+          {fullTestimonials.slice(3).map((t, index) => (
             <motion.div
               key={t.id}
               initial={{ opacity: 0, y: 30 }}

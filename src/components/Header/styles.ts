@@ -259,3 +259,107 @@ export const MobileNavLink = styled.a`
     color: ${({ theme }) => theme.colors.span};
   }
 `;
+
+export const LangButton = styled(motion.button)<ScrolledProps>`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: ${({ isScrolled, isDarkMode }) => {
+    if (isDarkMode) return '#ffffff';
+    return isScrolled ? '#333333' : '#111111';
+  }};
+  transition: color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &:hover {
+    color: #A44C4C;
+  }
+  
+  @media (max-width: 900px) {
+    width: 100%;
+    justify-content: center;
+  }
+`;
+
+export const LangDropdownContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
+`;
+
+export const LangDropdownMenu = styled(motion.div)`
+  position: absolute;
+  top: 150%;
+  right: 0;
+  background: white;
+  min-width: 140px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 1001;
+
+  html.dark & {
+    background: #111;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+`;
+
+export const LangOptionBtn = styled.button<{ isActive: boolean }>`
+  background: ${({ isActive }) => isActive ? 'rgba(164,76,76,0.1)' : 'transparent'};
+  color: ${({ isActive }) => isActive ? '#A44C4C' : 'inherit'};
+  border: none;
+  padding: 12px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+
+  html.dark & {
+    color: ${({ isActive }) => isActive ? '#A44C4C' : '#fff'};
+  }
+
+  &:hover {
+    background: rgba(164,76,76,0.08);
+  }
+`;
+
+export const MobileLangButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #333333;
+  padding: 10px 0;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.span};
+  }
+  
+  html.dark & {
+    color: white;
+  }
+`;

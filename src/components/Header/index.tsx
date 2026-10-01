@@ -5,6 +5,9 @@ import logo from '../../assets/img/logo.png';
 import logo1 from '../../assets/img/logo-1.png';
 import logoDark from '../../assets/img/logo-1.png';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobe, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
 import {
   NavHeader,
   Container,
@@ -19,7 +22,14 @@ import {
   MenuToggleButton,
   MobileMenu,
   MobileNavLink,
+  LangButton,
+  MobileLangButton,
+  LangDropdownContainer,
+  LangDropdownMenu,
+  LangOptionBtn,
 } from './styles';
+
+import { useLanguage } from '../../contexts/LanguageContext';
 
 import { HeaderProps } from './types';
 import QuoteModal from '../QuoteModal';
@@ -30,12 +40,33 @@ function Header({ account }: HeaderProps) {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const { lang, toggleLang, setLang, t } = useLanguage();
+
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const languages = [
+    { code: 'FR', label: 'Français', icon: '🇫🇷' },
+    { code: 'EN', label: 'English', icon: '🇬🇧' },
+    { code: 'AR', label: 'العربية', icon: '🇸🇦' }
+  ];
+
+  const handleLangChange = (code: string) => {
+    if (code === lang) return;
+    setIsLangMenuOpen(false);
+    localStorage.setItem('lang', code);
+    const isDirectionChange = (lang === 'AR') !== (code === 'AR');
+    if (isDirectionChange) {
+      window.location.reload();
+    } else {
+      setLang(code as any);
+    }
+  };
+
   const navItems = [
-    { label: 'À propos', link: '#about-us' },
-    { label: 'Services', link: '#services' },
-    { label: 'Portfolio', link: '#portfolio' },
-    { label: 'Testimonials', link: '#testimonial' },
-    { label: 'Contact', link: '#contact' },
+    { label: t('nav.about'), link: '#about-us' },
+    { label: t('nav.services'), link: '#services' },
+    { label: t('nav.portfolio'), link: '#portfolio' },
+    { label: t('nav.testimonials'), link: '#testimonial' },
+    { label: t('nav.contact'), link: '#contact' },
   ];
 
   useEffect(() => {
@@ -118,19 +149,61 @@ function Header({ account }: HeaderProps) {
               {item.label}
             </NavLinkItem>
           ))}
+          
         </DesktopNav>
 
-        {/* CTA Button */}
-        <CtaButton
-          onClick={(e) => {
-            e.preventDefault();
-            setIsQuoteModalOpen(true);
-          }}
-          isScrolled={scrolled}
-          className="cta-button"
-        >
-          Demander un devis
-        </CtaButton>
+        {/* Action Group */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <LangDropdownContainer
+            onMouseEnter={() => setIsLangMenuOpen(true)}
+            onMouseLeave={() => setIsLangMenuOpen(false)}
+          >
+            <LangButton
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              isScrolled={scrolled}
+              isDarkMode={isDarkMode}
+              className={isDarkMode ? 'dark-nav-link' : ''}
+              aria-label={t('nav.changeLang')}
+            >
+              {lang} <FontAwesomeIcon icon={faGlobe} style={{ fontSize: '13px', marginLeft: '4px' }} />
+            </LangButton>
+
+            <AnimatePresence>
+              {isLangMenuOpen && (
+                <LangDropdownMenu
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {languages.map(l => (
+                    <LangOptionBtn
+                      key={l.code}
+                      isActive={lang === l.code}
+                      onClick={() => handleLangChange(l.code)}
+                    >
+                      <span style={{ fontSize: '16px' }}>{l.icon}</span>
+                      <span>{l.label}</span>
+                    </LangOptionBtn>
+                  ))}
+                </LangDropdownMenu>
+              )}
+            </AnimatePresence>
+          </LangDropdownContainer>
+
+          {/* CTA Button */}
+          <CtaButton
+            onClick={(e) => {
+              e.preventDefault();
+              setIsQuoteModalOpen(true);
+            }}
+            isScrolled={scrolled}
+            className="cta-button"
+          >
+            {t('nav.quote')}
+          </CtaButton>
+        </div>
 
         {/* Mobile Menu Button */}
         <MenuToggleButton
@@ -176,7 +249,11 @@ function Header({ account }: HeaderProps) {
                 {item.label}
               </MobileNavLink>
             ))}
-            <div style={{ marginTop: '12px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+            <div style={{ marginTop: '12px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+              <MobileLangButton onClick={toggleLang}>
+                {lang} <FontAwesomeIcon icon={faGlobe} /> {t('nav.changeLang')}
+              </MobileLangButton>
+              
               <CtaButton
                 onClick={(e) => {
                   e.preventDefault();
@@ -186,7 +263,7 @@ function Header({ account }: HeaderProps) {
                 className="cta-button"
                 style={{ display: 'inline-block' }}
               >
-                Demander un devis
+                {t('nav.quote')}
               </CtaButton>
             </div>
           </MobileMenu>

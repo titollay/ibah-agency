@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 import config from "../../config";
 import allzyImage from "../../assets/img/mokkup.webp";
@@ -126,14 +127,27 @@ const defaultProjects: ProjectItem[] = [
   }
 ];
 
-const categories = ["Tous", "Web Development", "Mobile Apps", "AI & Automation"];
+const categories = ["Tous", "Web Development", "Mobile Apps", "AI & Automation"]; // fallback
 
 export default function Portfolio({ className = "" }: { className?: string }) {
+  const { t } = useLanguage();
+  
+  const translatedProjects = t<{ id: number, title: string, category: string, subtitle: string, description: string }[]>('portfolio.items') || [];
+  const fullProjects = defaultProjects.map(base => {
+    const translation = translatedProjects.find(item => item.id === base.id);
+    return { ...base, ...translation };
+  });
+
   const [category, setCategory] = useState("");
   const [categoriesList, setCategoriesList] = useState([]);
-  const [products, setProducts] = useState<ProjectItem[]>(defaultProjects);
+  const [products, setProducts] = useState<ProjectItem[]>(fullProjects);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
+
+  // Update products when language changes
+  useEffect(() => {
+    setProducts(fullProjects);
+  }, [t]);
 
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -168,9 +182,15 @@ export default function Portfolio({ className = "" }: { className?: string }) {
     page * ITEMS_PER_PAGE + ITEMS_PER_PAGE
   );
 
-  const filteredProjects = category === "" || category === "Tous" 
+  const translatedCategories = t<string[]>('portfolio.categories') || categories;
+
+  const filteredProjects = category === "" || category === translatedCategories[0] 
     ? products 
-    : products.filter(p => p.category === category);
+    : products.filter(p => {
+        const catIdx = categories.indexOf(p.category);
+        const translatedCat = translatedCategories[catIdx] || p.category;
+        return translatedCat === category;
+      });
 
   const displayedProjects = filteredProjects.slice(
     page * ITEMS_PER_PAGE,
@@ -754,13 +774,13 @@ export default function Portfolio({ className = "" }: { className?: string }) {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="header-content">
-              <p className="header-label">NOTRE PORTFOLIO</p>
+              <p className="header-label">{t('portfolio.label')}</p>
               <h2 className="header-title">
-                NOS PROJETS
-                <em>RÉCENTS</em>
+                {t('portfolio.title1')}
+                <em> {t('portfolio.title2')}</em>
               </h2>
               <p className="header-desc">
-                Découvrez une sélection de nos réalisations sur mesure conçues avec passion et précision pour nos clients.
+                {t('portfolio.desc')}
               </p>
             </div>
           </motion.div>
@@ -773,10 +793,10 @@ export default function Portfolio({ className = "" }: { className?: string }) {
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            {categories.map((cat) => (
+            {translatedCategories.map((cat) => (
               <button
                 key={cat}
-                className={`filter-btn ${category === cat ? 'active' : ''}`}
+                className={`filter-btn ${category === cat || (category === "" && cat === translatedCategories[0]) ? 'active' : ''}`}
                 onClick={() => {
                   setCategory(cat);
                   setPage(0);
@@ -838,7 +858,7 @@ export default function Portfolio({ className = "" }: { className?: string }) {
                           <p className="prod-card-desc">{p.description}</p>
                           <div className="btn-wrapper">
                             <span className="btn-text">
-                              Visiter le projet →
+                              {t('portfolio.visitProject')}
                             </span>
                           </div>
                         </div>
@@ -860,16 +880,16 @@ export default function Portfolio({ className = "" }: { className?: string }) {
             >
               {/* Counter */}
               <p className="pagination-counter">
-                Affichage{" "}
+                {t('portfolio.pagination.showing')}{" "}
                 <span>
-                  {page * ITEMS_PER_PAGE + 1}–
+                  {page * ITEMS_PER_PAGE + 1}{t('portfolio.pagination.to')}
                   {Math.min((page + 1) * ITEMS_PER_PAGE, filteredProjects.length)}
                 </span>{" "}
-                sur{" "}
+                {t('portfolio.pagination.of')}{" "}
                 <span className="total">
                   {filteredProjects.length}
                 </span>{" "}
-                projets
+                {t('portfolio.pagination.projects')}
               </p>
 
               {/* Page buttons */}
@@ -890,7 +910,7 @@ export default function Portfolio({ className = "" }: { className?: string }) {
                   >
                     <path d="M15 18l-6-6 6-6" />
                   </svg>
-                  Précédent
+                  {t('portfolio.pagination.prev')}
                 </button>
 
                 {/* Page numbers */}
@@ -910,7 +930,7 @@ export default function Portfolio({ className = "" }: { className?: string }) {
                   onClick={() => setPage((p) => p + 1)}
                   disabled={page === totalPages - 1}
                 >
-                  Suivant
+                  {t('portfolio.pagination.next')}
                   <svg
                     width="16"
                     height="16"
@@ -941,8 +961,7 @@ export default function Portfolio({ className = "" }: { className?: string }) {
           {!loading && filteredProjects.length <= ITEMS_PER_PAGE && filteredProjects.length > 0 && (
             <div className="no-pagination">
               <p>
-                {filteredProjects.length} projet{filteredProjects.length !== 1 ? "s" : ""}{" "}
-                trouvé{filteredProjects.length !== 1 ? "s" : ""}
+                {filteredProjects.length} {filteredProjects.length !== 1 ? t('portfolio.pagination.projectsFound') : t('portfolio.pagination.projectFound')}
               </p>
             </div>
           )}

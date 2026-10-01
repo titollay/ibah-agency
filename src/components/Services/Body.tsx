@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export interface ServiceItem {
   id: number | string;
@@ -52,15 +53,24 @@ const defaultServices: ServiceItem[] = [
 ];
 
 const ServicesBody: React.FC<ServicesBodyProps> = ({ content = defaultServices, onServiceClick }) => {
+  const { t } = useLanguage();
+  
   const handleCardClick = (serviceTitle: string) => {
     if (onServiceClick) {
       onServiceClick(serviceTitle);
     }
   };
 
+  const translatedItems = t<{title: string, body: string}[]>('services.items');
+  const localizedServices = content.map((service, index) => ({
+    ...service,
+    title: translatedItems?.[index]?.title || service.title,
+    body: translatedItems?.[index]?.body || service.body
+  }));
+
   return (
     <section className="services-container">
-      {content.map((serv) => (
+      {localizedServices.map((serv) => (
         <div 
           key={serv.id} 
           className={`services-card ${serv.highlighted ? 'highlighted' : ''}`}
