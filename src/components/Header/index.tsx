@@ -267,14 +267,44 @@ function Header({ account }: HeaderProps) {
                 {item.label}
               </MobileNavLink>
             ))}
-            <div style={{ marginTop: '12px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <MobileLangButton onClick={toggleLang}>
-                {lang} <FontAwesomeIcon icon={faGlobe} /> {t('nav.changeLang')}
-              </MobileLangButton>
+            <div style={{ marginTop: '12px', paddingTop: '16px', borderTop: '1px solid rgba(0,0,0,0.08)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', width: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                {languages.map(l => (
+                  <button
+                    key={l.code}
+                    onClick={() => {
+                      handleLangChange(l.code);
+                      setIsMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 12px',
+                      borderRadius: '20px',
+                      border: lang === l.code ? '1.5px solid #A44C4C' : '1px solid rgba(0,0,0,0.1)',
+                      background: lang === l.code ? 'rgba(164, 76, 76, 0.1)' : 'transparent',
+                      color: lang === l.code ? '#A44C4C' : isDarkMode ? '#FFFFFF' : '#333333',
+                      fontWeight: 700,
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <img 
+                      src={l.flagSvg} 
+                      alt={l.code} 
+                      style={{ width: '18px', height: '13px', borderRadius: '2px', objectFit: 'cover' }} 
+                    />
+                    <span>{l.code}</span>
+                  </button>
+                ))}
+              </div>
               
               <CtaButton
                 onClick={(e) => {
                   e.preventDefault();
+                  setIsMenuOpen(false);
                   setIsQuoteModalOpen(true);
                 }}
                 isScrolled={true}
