@@ -300,13 +300,15 @@ export const LangDropdownContainer = styled.div`
 
 export const LangDropdownMenu = styled(motion.div)`
   position: absolute;
-  top: 150%;
-  right: 0;
+  top: 130%;
+  left: 50%;
+  transform: translateX(-50%);
   background: white;
-  min-width: 140px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  border: 1px solid rgba(0,0,0,0.05);
+  min-width: 90px;
+  width: max-content;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -315,7 +317,7 @@ export const LangDropdownMenu = styled(motion.div)`
   html.dark & {
     background: #111;
     border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
   }
 `;
 

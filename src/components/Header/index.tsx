@@ -195,14 +195,14 @@ function Header({ account }: HeaderProps) {
                       key={l.code}
                       isActive={lang === l.code}
                       onClick={() => handleLangChange(l.code)}
-                      style={{ gap: '10px', justifyContent: 'flex-start', padding: '10px 14px' }}
+                      style={{ gap: '8px', justifyContent: 'center', padding: '8px 10px' }}
                     >
                       <img 
                         src={l.flagSvg} 
                         alt={l.code} 
-                        style={{ width: '20px', height: '14px', borderRadius: '2px', objectFit: 'cover' }} 
+                        style={{ width: '18px', height: '12px', borderRadius: '2px', objectFit: 'cover' }} 
                       />
-                      <span style={{ fontWeight: 700, fontSize: '14px' }}>{l.code}</span>
+                      <span style={{ fontWeight: 700, fontSize: '13.5px' }}>{l.code}</span>
                     </LangOptionBtn>
                   ))}
                 </LangDropdownMenu>
