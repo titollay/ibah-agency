@@ -1,6 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useLanguage } from '../../contexts/LanguageContext';
 import ServicesHeader from './Header';
 import ServicesBody from './Body';
 
@@ -9,15 +8,13 @@ interface ServicesProps {
 }
 
 const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
-  const { t } = useLanguage();
   const dynamiteBg = `${process.env.PUBLIC_URL}/svg/dynamite.svg`;
   const dynamite2Bg = `${process.env.PUBLIC_URL}/svg/dynamite2.svg`;
   const waveBg = `${process.env.PUBLIC_URL}/svg/wave.svg`;
 
   return (
     <section className="services" id="services" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Decorative Wave & SVG Shapes */}
-      <img src={waveBg} alt="" className="services-wave-bg" />
+      {/* Decorative SVG Shapes */}
       <img src={dynamiteBg} alt="" className="services-deco-left" />
       <img src={dynamite2Bg} alt="" className="services-deco-right" />
 
@@ -28,22 +25,20 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
           font-family: 'Montserrat', sans-serif;
           background-color: #F8F7F5;
         }
-        html.dark .services {
-          background-color: #0d0d0f;
-        }
         @media (max-width: 630px) {
           .services-header {
             margin-top: 15px;
           }
         }
 
-        .services-wave-bg {
+        .services::before {
+          content: '';
           position: absolute;
           inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: bottom center;
+          background-image: url("${waveBg}");
+          background-repeat: no-repeat;
+          background-position: bottom center;
+          background-size: cover;
           opacity: 0.9;
           pointer-events: none;
           z-index: 0;
@@ -265,8 +260,8 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
           viewport={{ once: true }}
         >
           <ServicesHeader header={{
-            title: t('services.title'),
-            body: t('services.body')
+            title: "NOS SERVICES",
+            body: "Des solutions numériques sur mesure conçues pour propulser votre entreprise vers l'excellence."
           }} />
         </motion.div>
 
