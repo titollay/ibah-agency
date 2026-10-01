@@ -10,11 +10,10 @@ interface ServicesProps {
 const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
   const dynamiteBg = `${process.env.PUBLIC_URL}/svg/dynamite.svg`;
   const dynamite2Bg = `${process.env.PUBLIC_URL}/svg/dynamite2.svg`;
+  const waveBg = `${process.env.PUBLIC_URL}/svg/Wave.svg`;
 
   return (
     <section className="services" id="services" style={{ position: 'relative', overflow: 'hidden' }}>
-      {/* Wave background using public/svg/wave.svg */}
-      <img src="/svg/wave.svg" alt="" className="services-wave-bg" />
       {/* Decorative SVG Shapes */}
       <img src={dynamiteBg} alt="" className="services-deco-left" />
       <img src={dynamite2Bg} alt="" className="services-deco-right" />
@@ -32,13 +31,14 @@ const Services: React.FC<ServicesProps> = ({ onServiceClick }) => {
           }
         }
 
-        .services-wave-bg {
+        .services::before {
+          content: '';
           position: absolute;
           inset: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: bottom center;
+          background-image: url("${waveBg}");
+          background-repeat: no-repeat;
+          background-position: bottom center;
+          background-size: cover;
           opacity: 0.9;
           pointer-events: none;
           z-index: 0;
