@@ -301,7 +301,7 @@ export const LangDropdownContainer = styled.div`
 export const LangDropdownMenu = styled(motion.div)`
   position: absolute;
   top: 130%;
-  left: 50%;
+  left: -60%;
   transform: translateX(-50%);
   background: white;
   min-width: 90px;
